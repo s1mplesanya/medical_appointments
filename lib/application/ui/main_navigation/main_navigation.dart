@@ -1,8 +1,10 @@
+import 'package:medical_appointments/application/domain/entity/service.dart';
 import 'package:medical_appointments/application/domain/screen_factory/screen_factory.dart';
 import 'package:flutter/material.dart';
 
 abstract class MainNavigationScreens {
-  static const mainScreen = '/main';
+  static const mainScreen = '/';
+  static const addNewRecord = '/addNewRecord';
 }
 
 class MainNavigation {
@@ -14,6 +16,15 @@ class MainNavigation {
   };
 
   Route<Object>? onGenerateRoute(RouteSettings settings) {
-    return null;
+    switch (settings.name) {
+      case MainNavigationScreens.addNewRecord:
+        final recordsList = settings.arguments as List<Service>;
+        return MaterialPageRoute(
+            builder: (_) => _screenFactory.makeAddNewRecordScreen(recordsList));
+
+      default:
+        const widget = Text('Nagivation error!');
+        return MaterialPageRoute(builder: (_) => widget);
+    }
   }
 }

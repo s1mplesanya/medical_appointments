@@ -10,10 +10,9 @@ class MyApp extends StatelessWidget {
     final mainNavigation = MainNavigation();
 
     return MaterialApp(
-      title: 'App',
+      title: 'Medical App',
       debugShowCheckedModeBanner: false,
-      // themeMode: ThemeMode.dark,
-      theme: AppTheme.dark(context),
+      theme: AppTheme.light(context),
       routes: mainNavigation.routes,
       initialRoute: MainNavigationScreens.mainScreen,
       onGenerateRoute: mainNavigation.onGenerateRoute,

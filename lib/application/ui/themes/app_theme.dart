@@ -1,29 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:medical_appointments/application/ui/themes/app_colors.dart';
+import 'package:medical_appointments/application/ui/themes/app_text_style.dart';
 
 abstract class AppTheme {
-  static ThemeData dark(BuildContext context) {
+  static ThemeData light(BuildContext context) {
     return ThemeData(
-      brightness: Brightness.dark,
-      // scaffoldBackgroundColor: AppColors.background,
-      // fontFamily: 'Unbounded',
-      // bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-      //   backgroundColor: AppColors.backgroundSecond,
-      //   selectedItemColor: AppColors.blue,
-      //   unselectedItemColor: AppColors.secondColor,
-      //   showUnselectedLabels: true,
-      // ),
-      // appBarTheme: const AppBarTheme(
-      //   backgroundColor: AppColors.background,
-      //   surfaceTintColor: AppColors.backgroundSecond,
-      // ),
-      // textTheme: const TextTheme(
-      //   bodyLarge: TextStyle(color: AppColors.gray2),
-      //   bodyMedium: TextStyle(color: AppColors.gray2),
-      //   bodySmall: TextStyle(color: AppColors.gray2),
-      // ),
-      // primaryTextTheme: const TextTheme(
-      //   displayLarge: TextStyle(color: AppColors.gray2),
-      // ),
+      brightness: Brightness.light,
+      scaffoldBackgroundColor: AppColors.whiteLite,
+      fontFamily: 'Inter',
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        backgroundColor: AppColors.white,
+        selectedItemColor: AppColors.pink,
+        unselectedItemColor: AppColors.gray,
+        showUnselectedLabels: true,
+        selectedLabelStyle: AppTextStyle.bottomNavBarTextStyle(context),
+        unselectedLabelStyle: AppTextStyle.bottomNavBarTextStyle(context),
+      ),
+      bottomAppBarTheme: BottomAppBarTheme(
+        color: AppColors.white,
+      ),
+
+      appBarTheme: const AppBarTheme(
+        backgroundColor: AppColors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(10),
+          ),
+        ),
+      ),
+      textTheme: const TextTheme(
+        bodyLarge: TextStyle(color: AppColors.black),
+        bodyMedium: TextStyle(color: AppColors.black),
+        bodySmall: TextStyle(color: AppColors.black),
+      ),
+      primaryTextTheme: const TextTheme(
+        displayLarge: TextStyle(color: AppColors.black),
+      ),
       // textSelectionTheme: const TextSelectionThemeData(
       //   cursorColor: AppColors.gray2, // Замените цвет курсора на белый
       //   selectionColor: AppColors.gray0,
@@ -56,6 +68,14 @@ abstract class AppTheme {
     );
   }
 
+  static List<BoxShadow> mainBoxShadows(BuildContext context) {
+    return [
+      BoxShadow(
+        color: AppColors.shadowColor1,
+        blurRadius: 40,
+      ),
+    ];
+  }
   // static ButtonStyle mainButtonStyle(BuildContext context) {
   //   return const ButtonStyle(
   //     backgroundColor: MaterialStatePropertyAll(AppColors.blue),
