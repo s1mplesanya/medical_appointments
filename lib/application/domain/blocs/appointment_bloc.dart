@@ -6,14 +6,9 @@ abstract class AppointmentEvent {}
 
 class AppointmentLoadInitialData extends AppointmentEvent {}
 
-// class AppointmentGoToStep extends AppointmentEvent {
-//   final int step;
-//   AppointmentGoToStep(this.step);
-// }
-
 class AppointmentUpdateStateEvent extends AppointmentEvent {
   final Doctor? selectedDoctor;
-  final Service? selectedService;
+  final List<Service>? selectedService;
   final DateTime? selectedTime;
   final int? step;
 
@@ -25,14 +20,13 @@ class AppointmentUpdateStateEvent extends AppointmentEvent {
   });
 }
 
-// Состояния
 abstract class AppointmentState {}
 
 class AppointmentInitial extends AppointmentState {}
 
 class AppointmentStepChanged extends AppointmentState {
   final Doctor? selectedDoctor;
-  final Service? selectedService;
+  final List<Service>? selectedService;
   final DateTime? selectedTime;
   final int currentStep;
 
@@ -43,10 +37,9 @@ class AppointmentStepChanged extends AppointmentState {
     this.currentStep = 0,
   });
 
-  // Метод для обновления состояния
   AppointmentStepChanged copyWith({
     Doctor? selectedDoctor,
-    Service? selectedService,
+    List<Service>? selectedService,
     DateTime? selectedTime,
     int? currentStep,
   }) {
@@ -62,7 +55,6 @@ class AppointmentStepChanged extends AppointmentState {
 class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
   AppointmentBloc() : super(AppointmentInitial()) {
     on<AppointmentLoadInitialData>(_onLoadInitialData);
-    // on<AppointmentGoToStep>(_onGoToStep);
     on<AppointmentUpdateStateEvent>(_updateCurrentState);
   }
 
@@ -74,13 +66,6 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
     // Здесь может быть ваша логика загрузки начальных данных
     emit(AppointmentInitial());
   }
-
-  // void _onGoToStep(AppointmentGoToStep event, Emitter<AppointmentState> emit) {
-  //   _currentStep = event.step;
-  //   emit(AppointmentStepChanged(
-  //     currentStep: event.step,
-  //   ));
-  // }
 
   void _updateCurrentState(
       AppointmentUpdateStateEvent event, Emitter<AppointmentState> emit) {

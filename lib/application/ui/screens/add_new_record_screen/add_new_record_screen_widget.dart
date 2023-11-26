@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:medical_appointments/application/domain/entity/service.dart';
 import 'package:medical_appointments/application/ui/themes/app_colors.dart';
 import 'package:medical_appointments/application/ui/themes/app_text_style.dart';
+import 'package:medical_appointments/application/ui/widgets/service_item_widget.dart';
 import 'package:medical_appointments/resourses/svgs.dart';
 
 class AddNewRecordScreenWidget extends StatelessWidget {
@@ -45,59 +46,7 @@ class AddNewRecordScreenWidget extends StatelessWidget {
             ),
             ...List.generate(
               services.length,
-              (index) => Padding(
-                padding: const EdgeInsets.only(left: 22, right: 22, bottom: 12),
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: AppColors.whiteLite.withOpacity(0.7),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 15,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(services[index].name),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        SizedBox(
-                          width: double.infinity,
-                          child: SvgPicture.asset(
-                            AppSvg.lineDash,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        RichText(
-                          text: TextSpan(
-                            children: <TextSpan>[
-                              TextSpan(
-                                text: 'Стоимость процедуры: ',
-                                style: AppTextStyle.topMenuTextStyleLight(
-                                  context,
-                                  color: AppColors.gray,
-                                ),
-                              ),
-                              TextSpan(
-                                text: '${services[index].price} BYN',
-                                style: AppTextStyle.topMenuTextStyleSemiBold(
-                                  context,
-                                  color: AppColors.gray,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+              (index) => ServiceItemWidget(service: services[index]),
             ),
           ],
         ),

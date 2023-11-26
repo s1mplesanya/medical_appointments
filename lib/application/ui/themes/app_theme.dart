@@ -16,12 +16,13 @@ abstract class AppTheme {
         selectedLabelStyle: AppTextStyle.bottomNavBarTextStyle(context),
         unselectedLabelStyle: AppTextStyle.bottomNavBarTextStyle(context),
       ),
-      bottomAppBarTheme: BottomAppBarTheme(
+      bottomAppBarTheme: const BottomAppBarTheme(
         color: AppColors.white,
       ),
 
       appBarTheme: const AppBarTheme(
         backgroundColor: AppColors.white,
+        surfaceTintColor: AppColors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
             bottom: Radius.circular(10),
