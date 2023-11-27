@@ -6,7 +6,7 @@ abstract class AppTheme {
   static ThemeData light(BuildContext context) {
     return ThemeData(
       brightness: Brightness.light,
-      scaffoldBackgroundColor: AppColors.whiteLite,
+      scaffoldBackgroundColor: const Color(0xFFF8F8F8),
       fontFamily: 'Inter',
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         backgroundColor: AppColors.white,
@@ -18,6 +18,7 @@ abstract class AppTheme {
       ),
       bottomAppBarTheme: const BottomAppBarTheme(
         color: AppColors.white,
+        surfaceTintColor: AppColors.white,
       ),
 
       appBarTheme: const AppBarTheme(

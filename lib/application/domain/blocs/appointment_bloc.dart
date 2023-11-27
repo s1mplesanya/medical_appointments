@@ -72,12 +72,22 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
     if (event.step != null) _currentStep = event.step!;
     final currentState = state;
     if (currentState is AppointmentStepChanged) {
-      emit(currentState.copyWith(
-        currentStep: event.step ?? currentState.currentStep,
-        selectedDoctor: event.selectedDoctor ?? currentState.selectedDoctor,
-        selectedService: event.selectedService ?? currentState.selectedService,
-        selectedTime: event.selectedTime ?? currentState.selectedTime,
-      ));
+      if (event.selectedDoctor != null && currentState.currentStep == 0) {
+        emit(currentState.copyWith(
+          currentStep: event.step ?? currentState.currentStep,
+          selectedDoctor: event.selectedDoctor ?? currentState.selectedDoctor,
+          selectedService: [],
+          selectedTime: null,
+        ));
+      } else {
+        emit(currentState.copyWith(
+          currentStep: event.step ?? currentState.currentStep,
+          selectedDoctor: event.selectedDoctor ?? currentState.selectedDoctor,
+          selectedService:
+              event.selectedService ?? currentState.selectedService,
+          selectedTime: event.selectedTime ?? currentState.selectedTime,
+        ));
+      }
     } else {
       emit(AppointmentStepChanged(
         currentStep: event.step ?? 0,
