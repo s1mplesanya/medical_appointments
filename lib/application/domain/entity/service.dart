@@ -1,8 +1,19 @@
-class Service {
+import 'dart:convert';
+
+import 'package:hive/hive.dart';
+part 'service.g.dart';
+
+@HiveType(typeId: 2)
+class Service extends HiveObject {
+  @HiveField(0)
   final String kod;
+  @HiveField(1)
   final String name;
+  @HiveField(2)
   final String active;
+  @HiveField(3)
   final String del;
+  @HiveField(4)
   final String price;
 
   Service({
@@ -13,13 +24,28 @@ class Service {
     required this.price,
   });
 
-  factory Service.fromJson(Map<String, dynamic> json) {
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'Kod': kod,
+      'Name': name,
+      'Active': active,
+      'Del': del,
+      'Price': price,
+    };
+  }
+
+  factory Service.fromMap(Map<String, dynamic> map) {
     return Service(
-      kod: json['Kod'] as String,
-      name: json['Name'] as String,
-      active: json['Active'] as String,
-      del: json['Del'] as String,
-      price: json['Price'] as String,
+      kod: map['Kod'] as String,
+      name: map['Name'] as String,
+      active: map['Active'] as String,
+      del: map['Del'] as String,
+      price: map['Price'] as String,
     );
   }
+
+  String toJson() => json.encode(toMap());
+
+  factory Service.fromJson(String source) =>
+      Service.fromMap(json.decode(source) as Map<String, dynamic>);
 }

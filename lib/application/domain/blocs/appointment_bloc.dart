@@ -63,7 +63,6 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
 
   void _onLoadInitialData(
       AppointmentLoadInitialData event, Emitter<AppointmentState> emit) {
-    // Здесь может быть ваша логика загрузки начальных данных
     emit(AppointmentInitial());
   }
 

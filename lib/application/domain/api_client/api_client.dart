@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:medical_appointments/application/domain/entity/appointment_record.dart';
 import 'package:medical_appointments/application/domain/entity/doctor.dart';
 import 'package:medical_appointments/application/domain/entity/service.dart';
 
@@ -41,5 +42,21 @@ class ApiClient {
     } else {
       throw Exception('Failed to load services');
     }
+  }
+
+  Future<void> addNewRecord(AppointmentRecord record) async {
+    final response = await http.post(
+      Uri.parse('https://api.tiamomed.by/api/v1/test/add_new_record'),
+      headers: {
+        'Login': 'narisuemvse',
+        'Password': '!by123narisuemvse',
+      },
+      body: record.toMap(),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to add new record');
+    }
+    // Обработка успешного ответа
   }
 }
