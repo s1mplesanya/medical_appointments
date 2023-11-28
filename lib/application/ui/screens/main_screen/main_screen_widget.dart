@@ -7,12 +7,15 @@ import 'package:medical_appointments/application/domain/blocs/appointment_bloc.d
 import 'package:medical_appointments/application/domain/blocs/appointment_time_bloc.dart';
 import 'package:medical_appointments/application/domain/blocs/doctor_bloc.dart';
 import 'package:medical_appointments/application/domain/blocs/service_bloc.dart';
+import 'package:medical_appointments/application/domain/data_provider/box_manager.dart';
+import 'package:medical_appointments/application/domain/entity/appointment_record.dart';
 import 'package:medical_appointments/application/domain/entity/doctor.dart';
 import 'package:medical_appointments/application/domain/entity/service.dart';
 import 'package:medical_appointments/application/ui/main_navigation/main_navigation.dart';
 import 'package:medical_appointments/application/ui/themes/app_colors.dart';
 import 'package:medical_appointments/application/ui/themes/app_text_style.dart';
 import 'package:medical_appointments/application/ui/themes/app_theme.dart';
+import 'package:medical_appointments/application/ui/widgets/custom_snack_bar_widget.dart';
 import 'package:medical_appointments/application/ui/widgets/material_bottom_bar_widget.dart';
 import 'package:medical_appointments/application/ui/widgets/service_item_widget.dart';
 import 'package:medical_appointments/resourses/svgs.dart';
@@ -774,18 +777,33 @@ class _NextButtonWidget extends StatelessWidget {
                   currentStep != 2 ? AppColors.pink : AppColors.white,
               backgroundColor: currentStep == 2 ? AppColors.pink : null,
             ),
-            onPressed: () {
+            onPressed: () async {
               final nextStep = appointmentBloc.currentStep + 1;
 
               if (nextStep > 3) return;
               final isStepChangedState =
                   appointmentBloc.state is AppointmentStepChanged;
-              if (!isStepChangedState) return;
+              if (!isStepChangedState) {
+                Future.microtask(
+                  () => CustomSnackbar.show(
+                      context: context, message: 'Вы не выбрали доктора!'),
+                );
+                return;
+              }
 
               final state = appointmentBloc.state as AppointmentStepChanged;
 
-              if (nextStep == 1 && state.selectedDoctor == null ||
-                  nextStep == 2 && state.selectedService == null) {
+              if (nextStep == 1 && state.selectedDoctor == null) {
+                Future.microtask(
+                  () => CustomSnackbar.show(
+                      context: context, message: 'Вы не выбрали доктора!'),
+                );
+                return;
+              } else if (nextStep == 2 && state.selectedService == null) {
+                Future.microtask(
+                  () => CustomSnackbar.show(
+                      context: context, message: 'Вы не выбрали услуги!'),
+                );
                 return;
               } else if (nextStep == 3) {
                 final appointmentTimeBloc = context.read<AppointmentTimeBloc>();
@@ -797,24 +815,6 @@ class _NextButtonWidget extends StatelessWidget {
 
                 final selectedTime = appointmentTimeBloc.state.selectedTime;
                 if (selectedTime == null || selectedTime.hour == 0) return;
-
-                final monthDate = appointmentTimeBloc.state.selectedMonth;
-
-                final datetime = DateTime(
-                  monthDate.year,
-                  monthDate.month,
-                  dayDate.day,
-                  selectedTime.hour,
-                  selectedTime.minute,
-                );
-
-                appointmentBloc.add(
-                  AppointmentUpdateStateEvent(
-                    selectedDoctor: state.selectedDoctor,
-                    selectedService: state.selectedService,
-                    selectedTime: datetime,
-                  ),
-                );
               }
 
               if (nextStep == 1) {
@@ -832,7 +832,35 @@ class _NextButtonWidget extends StatelessWidget {
                 appointmentBloc
                     .add(AppointmentUpdateStateEvent(step: nextStep));
               } else if (nextStep == 3) {
-                final state = appointmentBloc.state as AppointmentStepChanged;
+                final appointmentTimeBloc = context.read<AppointmentTimeBloc>();
+                final dayDate = appointmentTimeBloc.state.selectedDate;
+
+                final selectedTime = appointmentTimeBloc.state.selectedTime;
+                final monthDate = appointmentTimeBloc.state.selectedMonth;
+
+                final datetime = DateTime(
+                  monthDate.year,
+                  monthDate.month,
+                  dayDate!.day,
+                  selectedTime!.hour,
+                  selectedTime.minute,
+                );
+
+                final appointmentBox =
+                    await BoxManager.instance.openAppointmentsBox();
+                await appointmentBox.add(
+                  AppointmentRecord(
+                    selectedDoctor: state.selectedDoctor!,
+                    selectedServices: state.selectedService!,
+                    selectedDate: datetime,
+                  ),
+                );
+                await BoxManager.instance.closeBox(appointmentBox);
+                appointmentBloc.add(AppointmentGoToFirstStep());
+                Future.microtask(
+                  () => CustomSnackbar.show(
+                      context: context, message: 'Запись успешно добавлена!'),
+                );
                 //
               }
             },

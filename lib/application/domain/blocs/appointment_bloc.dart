@@ -20,6 +20,8 @@ class AppointmentUpdateStateEvent extends AppointmentEvent {
   });
 }
 
+class AppointmentGoToFirstStep extends AppointmentEvent {}
+
 abstract class AppointmentState {}
 
 class AppointmentInitial extends AppointmentState {}
@@ -56,6 +58,7 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
   AppointmentBloc() : super(AppointmentInitial()) {
     on<AppointmentLoadInitialData>(_onLoadInitialData);
     on<AppointmentUpdateStateEvent>(_updateCurrentState);
+    on<AppointmentGoToFirstStep>(_goToFirstStep);
   }
 
   int _currentStep = 0;
@@ -64,6 +67,17 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
   void _onLoadInitialData(
       AppointmentLoadInitialData event, Emitter<AppointmentState> emit) {
     emit(AppointmentInitial());
+  }
+
+  void _goToFirstStep(
+      AppointmentGoToFirstStep event, Emitter<AppointmentState> emit) {
+    _currentStep = 0;
+    emit(AppointmentStepChanged(
+      currentStep: 0,
+      selectedDoctor: null,
+      selectedService: null,
+      selectedTime: null,
+    ));
   }
 
   void _updateCurrentState(

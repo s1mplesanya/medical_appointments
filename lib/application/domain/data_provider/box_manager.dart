@@ -10,7 +10,7 @@ class BoxManager {
 
   BoxManager._();
 
-  Future<Box<AppointmentRecord>> openScheduleBox() async {
+  Future<Box<AppointmentRecord>> openAppointmentsBox() async {
     if (!Hive.isAdapterRegistered(1)) {
       Hive.registerAdapter(DoctorAdapter());
     }

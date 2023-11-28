@@ -15,9 +15,10 @@ class ApiClient {
     );
 
     if (response.statusCode == 200) {
+      print(json.decode(response.body));
       final data = json.decode(response.body) as Map<String, dynamic>;
       final items = data['items'] as List;
-      return items.map((json) => Doctor.fromJson(json)).toList();
+      return items.map((json) => Doctor.fromMap(json)).toList();
     } else {
       throw Exception('Failed to load doctors');
     }
@@ -38,7 +39,7 @@ class ApiClient {
     if (response.statusCode == 200) {
       final data = json.decode(response.body) as Map<String, dynamic>;
       final items = data['items'] as List;
-      return items.map((json) => Service.fromJson(json)).toList();
+      return items.map((json) => Service.fromMap(json)).toList();
     } else {
       throw Exception('Failed to load services');
     }

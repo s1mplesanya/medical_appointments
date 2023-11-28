@@ -11,4 +11,5 @@ class AppSvg {
   static const String info = 'assets/svgs/info.svg';
   static const String lineDash = 'assets/svgs/line_dash.svg';
   static const String arrowBack = 'assets/svgs/arrow_back.svg';
+  static const String dots = 'assets/svgs/dots.svg';
 }
