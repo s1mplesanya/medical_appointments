@@ -9,6 +9,15 @@ class AppTextStyle {
     );
   }
 
+  static TextStyle dateTextStyle(BuildContext context, {Color? color}) {
+    return TextStyle(
+      fontSize: 15,
+      fontWeight: FontWeight.w700,
+      height: 18 / 15,
+      color: color,
+    );
+  }
+
   static TextStyle backItemTextStyle(BuildContext context, {Color? color}) {
     return TextStyle(
       fontSize: 14,
@@ -100,6 +109,15 @@ class AppTextStyle {
       fontSize: 10,
       fontWeight: FontWeight.w300,
       height: 12 / 10,
+      color: color,
+    );
+  }
+
+  static TextStyle dolznostTextStyle(BuildContext context, {Color? color}) {
+    return TextStyle(
+      fontSize: 11,
+      fontWeight: FontWeight.w300,
+      height: 13 / 11,
       color: color,
     );
   }

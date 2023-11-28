@@ -11,6 +11,7 @@ import 'package:medical_appointments/application/domain/data_provider/box_manage
 import 'package:medical_appointments/application/domain/entity/appointment_record.dart';
 import 'package:medical_appointments/application/domain/entity/doctor.dart';
 import 'package:medical_appointments/application/domain/entity/service.dart';
+import 'package:medical_appointments/application/domain/screen_factory/screen_factory.dart';
 import 'package:medical_appointments/application/ui/main_navigation/main_navigation.dart';
 import 'package:medical_appointments/application/ui/themes/app_colors.dart';
 import 'package:medical_appointments/application/ui/themes/app_text_style.dart';
@@ -63,6 +64,7 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
   }
 
   Widget _buildScreen(int currentTabIndex) {
+    final screenFactory = ScreenFactory();
     switch (currentTabIndex) {
       case 0:
         return BlocProvider(
@@ -83,6 +85,8 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
             child: const _BodyWidget(),
           ),
         );
+      case 2:
+        return screenFactory.makeAppointmentsScreen();
       default:
         return Text(currentTabIndex.toString());
     }
