@@ -22,7 +22,7 @@ class AppointmentsScreenWidget extends StatelessWidget {
           );
         } else if (state is AppointmentsLoaded) {
           final groupedAppointments = state.groupedAppointments;
-          return _CustomAppointmentsWidget(groupedAppointments);
+          return _AllAppointmentsWidget(groupedAppointments);
         } else if (state is AppointmentsError) {
           return Center(
             child: Text('Error: ${state.error}'),
@@ -37,10 +37,10 @@ class AppointmentsScreenWidget extends StatelessWidget {
   }
 }
 
-class _CustomAppointmentsWidget extends StatelessWidget {
+class _AllAppointmentsWidget extends StatelessWidget {
   final Map<DateTime, List<AppointmentRecord>> groupedAppointments;
 
-  const _CustomAppointmentsWidget(this.groupedAppointments);
+  const _AllAppointmentsWidget(this.groupedAppointments);
 
   @override
   Widget build(BuildContext context) {
@@ -54,99 +54,146 @@ class _CustomAppointmentsWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 26),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 22),
-              child: Text(
-                DateFormat('dd MMMM yyyy', 'ru_RU').format(date),
-                style: AppTextStyle.backItemTextStyle(
-                  context,
-                  color: AppColors.gray,
-                ),
-              ),
-            ),
+            _SelectedTimeWidget(date: date),
             const SizedBox(height: 16),
             for (var appointment in appointments)
-              Padding(
-                padding: const EdgeInsets.only(left: 22, right: 22, bottom: 11),
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      MainNavigationScreens.appointmentDetail,
-                      arguments: appointment,
-                    );
-                  },
-                  child: IntrinsicHeight(
-                    child: Row(
-                      children: [
-                        DecoratedBox(
-                          decoration: BoxDecoration(
-                            color: AppColors.pink,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 9,
-                              vertical: 18,
-                            ),
-                            child: Text(
-                              DateFormat('HH:mm', 'ru_RU')
-                                  .format(appointment.selectedDate),
-                              style: AppTextStyle.dateTextStyle(
-                                context,
-                                color: AppColors.white,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: DecoratedBox(
-                            decoration: BoxDecoration(
-                              color: AppColors.white,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 11,
-                                vertical: 11,
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        appointment.selectedDoctor.name,
-                                        style:
-                                            AppTextStyle.topMenuTextStyleLight(
-                                                context),
-                                      ),
-                                      Text(
-                                        appointment.selectedDoctor.dolzhnost,
-                                        style: AppTextStyle.dolznostTextStyle(
-                                          context,
-                                          color: AppColors.gray,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SvgPicture.asset(AppSvg.dots),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+              _RecordItemWidget(appointment: appointment),
           ],
         );
       },
+    );
+  }
+}
+
+class _RecordItemWidget extends StatelessWidget {
+  const _RecordItemWidget({
+    required this.appointment,
+  });
+
+  final AppointmentRecord appointment;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 22, right: 22, bottom: 11),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.pushNamed(
+            context,
+            MainNavigationScreens.appointmentDetail,
+            arguments: appointment,
+          );
+        },
+        child: IntrinsicHeight(
+          child: Row(
+            children: [
+              _SelectedDoctorTimeWidget(appointment: appointment),
+              Expanded(
+                child: _SelectedDoctorInfoWidget(appointment: appointment),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _SelectedDoctorTimeWidget extends StatelessWidget {
+  const _SelectedDoctorTimeWidget({
+    required this.appointment,
+  });
+
+  final AppointmentRecord appointment;
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: AppColors.pink,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 9,
+          vertical: 18,
+        ),
+        child: Text(
+          DateFormat('HH:mm', 'ru_RU').format(appointment.selectedDate),
+          style: AppTextStyle.dateTextStyle(
+            context,
+            color: AppColors.white,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _SelectedDoctorInfoWidget extends StatelessWidget {
+  const _SelectedDoctorInfoWidget({
+    required this.appointment,
+  });
+
+  final AppointmentRecord appointment;
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 11,
+          vertical: 11,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  appointment.selectedDoctor.name,
+                  style: AppTextStyle.topMenuTextStyleLight(context),
+                ),
+                Text(
+                  appointment.selectedDoctor.dolzhnost,
+                  style: AppTextStyle.dolznostTextStyle(
+                    context,
+                    color: AppColors.gray,
+                  ),
+                ),
+              ],
+            ),
+            SvgPicture.asset(AppSvg.dots),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _SelectedTimeWidget extends StatelessWidget {
+  const _SelectedTimeWidget({
+    required this.date,
+  });
+
+  final DateTime date;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 22),
+      child: Text(
+        DateFormat('dd MMMM yyyy', 'ru_RU').format(date),
+        style: AppTextStyle.backItemTextStyle(
+          context,
+          color: AppColors.gray,
+        ),
+      ),
     );
   }
 }

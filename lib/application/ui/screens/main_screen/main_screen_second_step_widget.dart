@@ -81,7 +81,7 @@ class _ServiceListWidget extends StatelessWidget {
             ),
           );
         } else if (state is ServicesLoaded) {
-          final appointmentBloc = context.read<AppointmentBloc>();
+          final appointmentBloc = context.watch<AppointmentBloc>();
           final appointmentState =
               appointmentBloc.state as AppointmentStepChanged;
 

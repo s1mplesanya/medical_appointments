@@ -61,7 +61,7 @@ class _SelectDoctorListWidget extends StatelessWidget {
             ),
           );
         } else if (state is DoctorsLoaded) {
-          final appointmentBloc = context.read<AppointmentBloc>();
+          final appointmentBloc = context.watch<AppointmentBloc>();
           final doctor = appointmentBloc.state is AppointmentStepChanged
               ? (appointmentBloc.state as AppointmentStepChanged).selectedDoctor
               : null;

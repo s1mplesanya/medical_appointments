@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:medical_appointments/application/domain/api_client/api_client.dart';
 
 import 'package:medical_appointments/application/domain/blocs/appointment_bloc.dart';
 import 'package:medical_appointments/application/domain/blocs/appointment_time_bloc.dart';
@@ -24,23 +25,22 @@ class MainScreenWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) =>
-              AppointmentBloc()..add(AppointmentLoadInitialData()),
-        ),
-        BlocProvider<DoctorBloc>(
-          create: (_) => DoctorBloc()..add(LoadDoctors()),
-        ),
-        BlocProvider<ServiceBloc>(
-          create: (_) => ServiceBloc(),
-        ),
-        BlocProvider<AppointmentTimeBloc>(
-          create: (_) => AppointmentTimeBloc(),
-        ),
-      ],
-      child: const _BodyWidget(),
+    return BlocProvider(
+      create: (context) => AppointmentBloc()..add(AppointmentLoadInitialData()),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider<DoctorBloc>(
+            create: (_) => DoctorBloc()..add(LoadDoctors()),
+          ),
+          BlocProvider<ServiceBloc>(
+            create: (_) => ServiceBloc(),
+          ),
+          BlocProvider<AppointmentTimeBloc>(
+            create: (_) => AppointmentTimeBloc(),
+          ),
+        ],
+        child: const _BodyWidget(),
+      ),
     );
   }
 }
@@ -212,20 +212,22 @@ class _NextButtonWidget extends StatelessWidget {
       );
 
       final appointmentBox = await BoxManager.instance.openAppointmentsBox();
-      await appointmentBox.add(
-        AppointmentRecord(
-          selectedDoctor: state.selectedDoctor!,
-          selectedServices: state.selectedService!,
-          selectedDate: datetime,
-        ),
+      final newAppointment = AppointmentRecord(
+        selectedDoctor: state.selectedDoctor!,
+        selectedServices: state.selectedService!,
+        selectedDate: datetime,
       );
+      await appointmentBox.add(newAppointment);
       await BoxManager.instance.closeBox(appointmentBox);
       appointmentBloc.add(AppointmentGoToFirstStep());
       Future.microtask(
         () => CustomSnackbar.show(
             context: context, message: 'Запись успешно добавлена!'),
       );
+
       //
+      final apiCLient = ApiClient();
+      await apiCLient.addNewRecord(newAppointment);
     }
   }
 

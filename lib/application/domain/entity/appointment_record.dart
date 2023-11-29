@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:hive/hive.dart';
+import 'package:intl/intl.dart';
 import 'package:medical_appointments/application/domain/entity/doctor.dart';
 import 'package:medical_appointments/application/domain/entity/service.dart';
 part 'appointment_record.g.dart';
@@ -19,6 +20,15 @@ class AppointmentRecord extends HiveObject {
     required this.selectedServices,
     required this.selectedDate,
   });
+
+  Map<String, dynamic> toRecordMap() {
+    return <String, dynamic>{
+      'doctor': selectedDoctor.toMap(),
+      'services': selectedServices.map((x) => x.kod).toList(),
+      'date': DateFormat('yyyy-MMMM-DD').format(selectedDate),
+      'time': DateFormat.Hm().format(selectedDate),
+    };
+  }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{

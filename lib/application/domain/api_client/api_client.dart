@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:medical_appointments/application/domain/entity/appointment_record.dart';
 import 'package:medical_appointments/application/domain/entity/doctor.dart';
 import 'package:medical_appointments/application/domain/entity/service.dart';
@@ -51,12 +52,18 @@ class ApiClient {
         'Login': 'narisuemvse',
         'Password': '!by123narisuemvse',
       },
-      body: record.toMap(),
+      body: {
+        'doctor': record.selectedDoctor.kod,
+        'services': record.selectedServices.map((x) => x.kod).toString(),
+        'date': DateFormat('yyyy-MMMM-DD').format(record.selectedDate),
+        'time': DateFormat.Hm().format(record.selectedDate),
+      },
     );
 
-    if (response.statusCode != 200) {
+    if (response.statusCode == 200) {
+      print(response.body);
+    } else {
       throw Exception('Failed to add new record');
     }
-    // Обработка успешного ответа
   }
 }
