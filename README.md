@@ -44,14 +44,14 @@ This Android application streamlines the process of booking appointments for pat
 
 ## Screenshots
 
-![Choose doctor](screenshots/choose_doctor.png) 
-![Chosen doctor](screenshots/chosen_doctor.png) 
-![Choose service](screenshots/choose_service.png) 
-![Available services](screenshots/available_services.png) 
-![Chosen services](screenshots/chosen_services.png) 
-![Choose time1](screenshots/choose_time.png) 
-![Created Appointment](screenshots/created_appointment.png) 
-![Created Appointment Detail](screenshots/created_appointment_detail.png)
+<img src="screenshots/choose_doctor.png" width="150">
+<img src="screenshots/chosen_doctor.png" width="150">
+<img src="screenshots/choose_service.png" width="150">
+<img src="screenshots/available_services.png" width="150">
+<img src="screenshots/chosen_services.png" width="150">
+<img src="screenshots/choose_time.png" width="150">
+<img src="screenshots/created_appointment.png" width="150">
+<img src="screenshots/created_appointment_detail.png" width="150">
 
 ## Contact
  - **[Telegram](https://t.me/SimpleSanya)**
