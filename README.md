@@ -54,4 +54,4 @@ This Android application streamlines the process of booking appointments for pat
 ![Created Appointment Detail](screenshots/created_appointment_detail.png)
 
 ## Contact
-- **Telegram**: [t.me/SimpleSanya]
+ - **[Telegram](t.me/SimpleSanya)**:
